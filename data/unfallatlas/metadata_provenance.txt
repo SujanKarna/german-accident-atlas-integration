@@ -1,0 +1,5 @@
+source_url=https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/DSB_Unfallatlas_EN.pdf
+downloaded_at=2026-05-24T20:00:16.929453+00:00Z
+sha256=ff5b0176208be8a0ea2114247ab5762ad22514d0dd38fbf449c849e61966d36c
+licence=Datenlizenz Deutschland - Namensnennung - Version 2.0
+licence_url=https://www.govdata.de/dl-de/by-2-0

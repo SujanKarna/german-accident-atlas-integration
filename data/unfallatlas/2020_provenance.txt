@@ -1,0 +1,5 @@
+source_url=https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2020_EPSG25832_CSV.zip
+downloaded_at=2026-05-24T20:00:32.411028+00:00Z
+sha256=cc7133694fbe144d3e26fc724bea1e266a4f933ba85dcc410ac94aa1205e8f88
+licence=Datenlizenz Deutschland - Namensnennung - Version 2.0
+licence_url=https://www.govdata.de/dl-de/by-2-0
