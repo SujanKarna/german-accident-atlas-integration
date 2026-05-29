@@ -44,7 +44,22 @@ def download_year(year):
     extract_dir.mkdir(exist_ok=True)
 
     with zipfile.ZipFile(dest_zip, "r") as z:
-        z.extractall(extract_dir)
+        for member in z.namelist():
+            # Extract everything
+            z.extract(member, extract_dir)
+
+            # If it's a CSV or TXT, move it to the year folder root
+            if member.lower().endswith((".csv", ".txt")):
+                extracted_path = extract_dir / member
+                final_path = extract_dir / Path(member).name
+
+                # Ensure parent exists
+                final_path.parent.mkdir(parents=True, exist_ok=True)
+
+                # Move file to year folder
+                extracted_path.rename(final_path)
+
+
 
     # Save provenance
     provenance_file = DATA_DIR / f"{year}_provenance.txt"

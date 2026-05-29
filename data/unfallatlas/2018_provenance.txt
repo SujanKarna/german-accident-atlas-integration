@@ -1,5 +1,5 @@
 source_url=https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2018_EPSG25832_CSV.zip
-downloaded_at=2026-05-24T20:00:23.575578+00:00Z
+downloaded_at=2026-05-25T08:26:11.420929+00:00Z
 sha256=b6a3bb133aa177759b1685f2fdf610f3c2960bb1c3381c38eb15e67d05b0eed6
 licence=Datenlizenz Deutschland - Namensnennung - Version 2.0
 licence_url=https://www.govdata.de/dl-de/by-2-0
