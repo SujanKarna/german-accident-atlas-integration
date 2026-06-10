@@ -5,11 +5,11 @@ INT_COLUMNS = [
     "month",
     "hour",
     "weekday",
-    "accident_severity",
+    "accident_kind",
     "accident_type",
     "accident_category",
     "light_condition",
-    "road_surface_condition",
+    "road_condition",
     "plausibility_level",
 ]
 
@@ -51,10 +51,12 @@ def convert_types(df: pd.DataFrame) -> pd.DataFrame:
     # Convert float-like columns
     for col in FLOAT_COLUMNS:
         if col in df.columns:
-            df[col] = df[col].apply(lambda x: float(x) if pd.notna(x) else None)
+            df[col] = df[col].apply(lambda x: float(str(x).replace(",", ".")) if pd.notna(x) else None
+)
 
-    # Participant flags: already normalized in Step 3, but ensure int/None
+
+    # Participant flags
     for col in PARTICIPANT_FLAGS:
-        df[col] = df[col].apply(lambda x: int(x) if x in [0, 1] else None)
+        df[col] = df[col].apply(lambda x: int(x) if x in ["0", "1"] else None)
 
     return df

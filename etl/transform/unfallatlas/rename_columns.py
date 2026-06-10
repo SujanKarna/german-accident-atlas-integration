@@ -11,20 +11,20 @@ GERMAN_TO_ENGLISH = {
     "USTUNDE": "hour",
     "UWOCHENTAG": "weekday",
 
-    "UKATEGORIE": "accident_severity",
-    "UART": "accident_type",
-    "UTYP1": "accident_category",
+    # Corrected according to PDF
+    "UKATEGORIE": "accident_category",
+    "UART": "accident_kind",
+    "UTYP1": "accident_type",
 
     "ULICHTVERH": "light_condition",
     "LICHT": "light_condition",
 
-    "USTRZUSTAND": "road_surface_condition",
-    "STRZUSTAND": "road_surface_condition",
-    "ISTSTRASSENZUSTAND": "road_surface_condition",
-    "istStrasse": "road_surface_condition",
-    "ISTSTRASSE": "road_surface_condition",
-
-
+    # Road condition (unified)
+    "USTRZUSTAND": "road_condition",
+    "STRZUSTAND": "road_condition",
+    "ISTSTRASSENZUSTAND": "road_condition",
+    "istStrasse": "road_condition",
+    "ISTSTRASSE": "road_condition",
 
     "LINREFX": "utm_x",
     "LINREFY": "utm_y",
@@ -40,10 +40,9 @@ GERMAN_TO_ENGLISH = {
     "ISTSONSTIG": "is_other",
     "ISTSONSTIGE": "is_other",
     "ISTSONSTIG_": "is_other",
-
-
     "PLST": "plausibility_level",
 }
+
 
 
 
