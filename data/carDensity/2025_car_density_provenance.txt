@@ -1,0 +1,5 @@
+source_url=https://regionalatlas.statistikportal.de
+downloaded_at=2026-06-11T13:40:30.231329+00:00Z
+sha256=bd6ef0589c4ffa57a4ad307d0a8a3bca68a2a1279694e69b5026b8fef7dc7fe0
+licence=Datenlizenz Deutschland - Namensnennung - Version 2.0
+licence_url=https://www.govdata.de/dl-de/by-2-0

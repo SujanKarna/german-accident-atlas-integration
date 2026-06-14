@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS fact_accident (
     accident_type_code INT REFERENCES dim_accident_type(type_code),
     light_condition_code INT REFERENCES dim_light_condition(light_condition_code),
     plausibility_code INT REFERENCES dim_plausibility_level(plausibility_code),
-    road_condition_code INT REFERENCES dim_road_condition(road_condition_code),x cvs
+    road_condition_code INT REFERENCES dim_road_condition(road_condition_code),
     municipality_code VARCHAR(8),
     state_code VARCHAR(2) REFERENCES dim_state(state_code),
 
@@ -91,3 +91,20 @@ CREATE TABLE IF NOT EXISTS source_metadata (
     downloaded_at TEXT,
     sha256 TEXT
 );
+
+
+CREATE TABLE dim_population_density (
+    state_code VARCHAR(2) NOT NULL REFERENCES dim_state(state_code),
+    population_density DECIMAL(10,2) NOT NULL,
+    year INT NOT NULL,
+    PRIMARY KEY (state_code, year)
+);
+
+CREATE TABLE dim_car_density (
+    state_code VARCHAR(2) NOT NULL REFERENCES dim_state(state_code),
+    car_density DECIMAL(10,2) NOT NULL,
+    year INT NOT NULL,
+    PRIMARY KEY (state_code, year)
+);
+
+

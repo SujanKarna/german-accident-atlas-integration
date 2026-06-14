@@ -3,17 +3,17 @@ from pathlib import Path
 from etl.parse.common.parse_provenance import parse_provenance_file
 
 
-
-def load_source_metadata():
-    DATA_DIR = Path("data/unfallatlas")
+def load_population_metadata():
+    DATA_DIR = Path("data/population")
     conn = get_connection()
     cur = conn.cursor()
 
-    for file in DATA_DIR.glob("[0-9][0-9][0-9][0-9]_provenance.txt"):
-        year = file.stem.split("_")[0]  # "2016_provenance" → "2016"
+    # Matches files like: 2024_population_density_provenance.txt
+    for file in DATA_DIR.glob("*_population_density_provenance.txt"):
+        year = file.stem.split("_")[0]  # "2024_population_density_provenance" → "2024"
         parsed = parse_provenance_file(file)
 
-        dataset = f"unfallatlas_{year}"
+        dataset = f"population_density_{year}"
         source_url = parsed.get("source_url")
         license = parsed.get("licence")
         license_url = parsed.get("licence_url")
@@ -42,7 +42,4 @@ def load_source_metadata():
     cur.close()
     conn.close()
 
-    print("Metadata loaded for all years.")
-
-if __name__ == "__main__":
-    load_source_metadata()
+    print("Population metadata loaded.")
