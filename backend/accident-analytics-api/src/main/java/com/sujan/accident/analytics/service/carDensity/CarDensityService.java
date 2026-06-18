@@ -10,4 +10,6 @@ public interface CarDensityService {
     List<CarDensity> getByYear(int year);
 
     List<CarDensity> getByState(String stateCode);
+
+    CarDensity getByStateAndYear(String stateCode, int year);
 }

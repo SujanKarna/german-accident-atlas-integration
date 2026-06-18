@@ -4,13 +4,11 @@ package com.sujan.accident.analytics.controller;
 import com.sujan.accident.analytics.model.population.PopulationDensity;
 import com.sujan.accident.analytics.service.population.PopulationDensityService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/population-density")
 @AllArgsConstructor

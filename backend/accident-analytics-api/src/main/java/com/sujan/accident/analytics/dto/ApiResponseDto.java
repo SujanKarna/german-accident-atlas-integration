@@ -4,11 +4,11 @@ import com.sujan.accident.analytics.model.common.SourceMetadata;
 import lombok.Getter;
 
 @Getter
-public class ApiResponse<T> {
+public class ApiResponseDto<T> {
     private final T data;
     private final SourceMetadata sourceMetadata;
 
-    public ApiResponse(T data, SourceMetadata sourceMetadata) {
+    public ApiResponseDto(T data, SourceMetadata sourceMetadata) {
         this.data = data;
         this.sourceMetadata = sourceMetadata;
     }

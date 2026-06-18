@@ -11,4 +11,6 @@ public interface PopulationDensityRepository extends JpaRepository<PopulationDen
     List<PopulationDensity> findByIdYear(Integer year);
 
     List<PopulationDensity> findByIdStateCode(String stateCode);
+
+    PopulationDensity findByIdStateCodeAndIdYear(String stateCode, int year);
 }

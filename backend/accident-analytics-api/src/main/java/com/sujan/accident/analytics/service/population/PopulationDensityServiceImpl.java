@@ -27,4 +27,9 @@ public class PopulationDensityServiceImpl implements PopulationDensityService {
     public List<PopulationDensity> getByState(String stateCode) {
         return repo.findByIdStateCode(stateCode);
     }
+
+    @Override
+    public PopulationDensity getByStateAndYear(String stateCode, int year) {
+        return repo.findByIdStateCodeAndIdYear(stateCode, year);
+    }
 }

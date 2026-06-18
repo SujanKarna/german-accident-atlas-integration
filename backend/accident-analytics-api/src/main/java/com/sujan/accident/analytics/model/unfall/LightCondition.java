@@ -10,7 +10,7 @@ import lombok.Data;
 @Table(name = "dim_light_condition")
 public class LightCondition {
     @Id
-    private Integer code;
+    private Integer lightConditionCode;
 
     private String label;
 

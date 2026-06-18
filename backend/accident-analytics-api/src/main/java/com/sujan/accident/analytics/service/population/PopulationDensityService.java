@@ -14,4 +14,6 @@ public interface PopulationDensityService {
     List<PopulationDensity> getByYear(int year);
 
     List<PopulationDensity> getByState(String stateCode);
+
+    PopulationDensity getByStateAndYear(String stateCode, int year);
 }

@@ -27,4 +27,9 @@ public class CarDensityServiceImpl implements CarDensityService {
     public List<CarDensity> getByState(String stateCode) {
         return repo.findByIdStateCode(stateCode);
     }
+
+    @Override
+    public CarDensity getByStateAndYear(String stateCode, int year) {
+        return repo.findByIdStateCodeAndIdYear(stateCode, year);
+    }
 }

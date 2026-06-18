@@ -10,6 +10,6 @@ import lombok.Data;
 @Table(name = "dim_accident_kind")
 public class AccidentKind {
     @Id
-    private Integer id;
+    private Integer kindCode;
     private String label;
 }

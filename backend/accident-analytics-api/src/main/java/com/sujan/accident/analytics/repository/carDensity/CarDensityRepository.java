@@ -11,4 +11,6 @@ public interface CarDensityRepository extends JpaRepository<CarDensity, CarDensi
     List<CarDensity> findByIdYear(Integer year);
 
     List<CarDensity> findByIdStateCode(String stateCode);
+
+    CarDensity findByIdStateCodeAndIdYear(String stateCode, int year);
 }

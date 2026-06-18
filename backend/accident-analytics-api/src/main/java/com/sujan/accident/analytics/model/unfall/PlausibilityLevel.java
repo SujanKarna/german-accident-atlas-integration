@@ -10,7 +10,7 @@ import lombok.Data;
 @Table(name="dim_plausibility")
 public class PlausibilityLevel {
     @Id
-    private Integer Code;
+    private Integer plausibilityCode;
 
     private String label;
 }

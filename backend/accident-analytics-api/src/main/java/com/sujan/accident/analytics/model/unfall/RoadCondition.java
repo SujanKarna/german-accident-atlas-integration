@@ -10,18 +10,7 @@ import lombok.Data;
 @Table(name = "dim_road_condition")
 public class RoadCondition {
     @Id
-    private Integer code;
+    private Integer roadConditionCode;
     private String label;
 
-    @Entity
-    @Data
-    @Table(name = "dim_district")
-    public static class district {
-        @Id
-        private String agsDistrict;
-
-        private String districtName;
-        private String stateName;
-        private String stateCode;
-    }
 }

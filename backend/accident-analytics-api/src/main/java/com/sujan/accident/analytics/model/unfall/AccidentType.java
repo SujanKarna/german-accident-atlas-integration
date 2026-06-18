@@ -11,6 +11,6 @@ import lombok.Data;
 @Table(name="dim_accident_type")
 public class AccidentType {
     @Id
-    private Integer id;
+    private Integer typeCode;
     private String label;
 }
