@@ -23,8 +23,8 @@ import java.util.List;
 @Tag(
         name = "Car Density",
         description = """
-            Dataset: Number of registered passenger cars per 1,000 inhabitants 
-            (Stichtag: 01.01.2025). 
+            Dataset: Number of registered passenger cars per 1,000 inhabitants
+            (Stichtag: 01.01.2025).
             
             Provides car density values for German federal states by year.
             """
@@ -71,7 +71,7 @@ public class CarDensityController {
     @Operation(
             summary = "Get car density for a specific year",
             description = """
-                Returns car density values (cars per 1,000 inhabitants) 
+                Returns car density values (cars per 1,000 inhabitants)
                 for all German states for the given year.
                 Throws an error if the year is invalid or no data exists.
                 """
@@ -107,7 +107,7 @@ public class CarDensityController {
     @Operation(
             summary = "Get car density for a specific state",
             description = """
-                Returns car density values (cars per 1,000 inhabitants) 
+                Returns car density values (cars per 1,000 inhabitants)
                 for all years for the given German federal state.
                 State code must be a two-digit numeric code (01–16).
                 """
