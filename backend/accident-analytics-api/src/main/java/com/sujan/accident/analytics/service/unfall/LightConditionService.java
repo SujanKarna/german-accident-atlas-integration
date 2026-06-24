@@ -5,5 +5,5 @@ import com.sujan.accident.analytics.model.unfall.LightCondition;
 import java.util.List;
 
 public interface LightConditionService {
-    List<LightCondition> findAll();
+    String getLabel(Integer code);
 }

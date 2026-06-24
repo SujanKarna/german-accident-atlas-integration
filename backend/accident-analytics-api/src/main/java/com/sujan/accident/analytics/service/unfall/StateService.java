@@ -6,12 +6,8 @@ import java.util.List;
 
 public interface StateService {
 
-    List<State> getAllStates();
+    boolean exists(String stateCode);
 
-    State getStateByCode(String code);
-
-    String getStateName(String code);
-
-    boolean existsStateByCode(String code);
+    String getStateName(String stateCode);
 
 }

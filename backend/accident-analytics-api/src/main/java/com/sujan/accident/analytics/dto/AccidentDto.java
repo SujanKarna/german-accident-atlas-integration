@@ -1,33 +1,45 @@
 package com.sujan.accident.analytics.dto;
 
-public class AccidentDto {
-    Long id;
-    int year;
-    int month;
-    int hour;
+public record AccidentDto(
+        Long id,
+        Integer year,
+        Integer month,
+        Integer hour,
 
-    // dimension labels
-    String state;
-    String district;
-    String accidentType;
-    String accidentCategory;
-    String accidentKind;
-    String lightCondition;
-    String roadCondition;
-    String plausibility;
+        String stateCode,
+        String stateName,
 
-    // coordinates
-    Double lat;
-    Double lon;
-    Double utmX;
-    Double utmY;
+        String municipalityCode,
 
-    // participant flags
-    boolean car;
-    boolean motorcycle;
-    boolean bicycle;
-    boolean pedestrian;
-    boolean goodsVehicle;
-    boolean other;
+        Integer accidentCategoryCode,
+        String accidentCategoryLabel,
 
-}
+        Integer accidentKindCode,
+        String accidentKindLabel,
+
+        Integer accidentTypeCode,
+        String accidentTypeLabel,
+
+        Integer lightConditionCode,
+        String lightConditionLabel,
+
+        Integer roadConditionCode,
+        String roadConditionLabel,
+
+        Integer plausibilityCode,
+        String plausibilityLabel,
+
+        String weekDay,
+
+        Double latitude,
+        Double longitude,
+        Double utmX,
+        Double utmY,
+
+        Boolean isCar,
+        Boolean isMotorcycle,
+        Boolean isBicycle,
+        Boolean isPedestrian,
+        Boolean isGoodsVehicle,
+        Boolean isOthers
+) {}

@@ -6,6 +6,6 @@ import com.sujan.accident.analytics.repository.unfall.AccidentKindRepository;
 import java.util.List;
 
 public interface AccidentKindService {
-    List<AccidentKind> findAll();
+    String getLabel(Integer code);
 
 }

@@ -6,5 +6,5 @@ import com.sujan.accident.analytics.model.unfall.PlausibilityLevel;
 import java.util.List;
 
 public interface PlausibilityLevelService {
-    List<PlausibilityLevel> findAll();
+    String getLabel(Integer code);
 }

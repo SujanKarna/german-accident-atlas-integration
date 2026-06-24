@@ -11,8 +11,7 @@ import lombok.Data;
 @Data
 public class State {
     @Id
-    private String code;   // ULAND
-
-
+    private String stateCode;
+    @Column(name = "state_name")// ULAND
     private String label;
 }

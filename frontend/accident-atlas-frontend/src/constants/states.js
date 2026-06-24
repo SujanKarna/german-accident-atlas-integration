@@ -16,3 +16,4 @@ export const STATES = [
   { code: "15", name: "Sachsen-Anhalt" },
   { code: "16", name: "Thüringen" }
 ];
+export default STATES;

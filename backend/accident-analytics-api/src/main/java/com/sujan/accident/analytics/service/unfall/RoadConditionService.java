@@ -5,5 +5,5 @@ import com.sujan.accident.analytics.model.unfall.RoadCondition;
 import java.util.List;
 
 public interface RoadConditionService {
-    List<RoadCondition> findAll();
+    String getLabel(Integer code);
 }

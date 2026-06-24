@@ -1,5 +1,6 @@
 package com.sujan.accident.analytics.service.common.impl;
 
+import com.sujan.accident.analytics.exception.MetadataNotFoundException;
 import com.sujan.accident.analytics.model.common.SourceMetadata;
 import com.sujan.accident.analytics.repository.common.SourceMetadataRepository;
 import com.sujan.accident.analytics.service.common.SourceMetadataService;
@@ -13,8 +14,11 @@ public class SourceMetadataServiceImpl implements SourceMetadataService {
         this.repo = repo;
     }
 
+
+
     public SourceMetadata getMetadata(String dataset) {
+
         return repo.findById(dataset)
-                .orElseThrow(()->new RuntimeException("Metadata not found for dataset: " + dataset));
+                .orElseThrow(()->new MetadataNotFoundException(dataset));
     }
 }

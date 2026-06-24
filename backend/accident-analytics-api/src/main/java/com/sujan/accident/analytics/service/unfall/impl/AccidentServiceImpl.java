@@ -1,146 +1,238 @@
 package com.sujan.accident.analytics.service.unfall.impl;
 
+import com.sujan.accident.analytics.dto.AccidentDto;
+import com.sujan.accident.analytics.dto.AccidentSummaryDto;
+import com.sujan.accident.analytics.dto.AccidentTrendDto;
 import com.sujan.accident.analytics.exception.unfall.InvalidStateCodeException;
-import com.sujan.accident.analytics.repository.carDensity.CarDensityRepository;
-import com.sujan.accident.analytics.repository.population.PopulationDensityRepository;
+import com.sujan.accident.analytics.exception.unfall.InvalidYearException;
+import com.sujan.accident.analytics.exception.unfall.NoDataForYearException;
+import com.sujan.accident.analytics.mapper.AccidentMapper;
+import com.sujan.accident.analytics.model.unfall.Accident;
 import com.sujan.accident.analytics.repository.unfall.AccidentRepository;
-import com.sujan.accident.analytics.repository.unfall.StateRepository;
 import com.sujan.accident.analytics.service.unfall.AccidentService;
+import com.sujan.accident.analytics.service.unfall.StateService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
 
 @Service
 @AllArgsConstructor
 public class AccidentServiceImpl implements AccidentService {
 
-    private final AccidentRepository repo;
-    private final CarDensityRepository carRepo;
-    private final PopulationDensityRepository populationRepo;
+    private final AccidentRepository accidentRepository;
+    private final AccidentMapper accidentMapper;
 
+    private final StateService stateService;
 
-    // Mandatory DBW questions
+    // ------------------------------------------------------------
+    // BASIC YEAR + STATE QUERIES
+    // ------------------------------------------------------------
+
     @Override
-    public int getEarliestAccidentYear() {
-
-        return repo.findEarliestYear();
+    public Integer getEarliestAccidentYear() {
+        return accidentRepository.findEarliestYear();
     }
 
     @Override
-    public int getEarliestYearForState(String stateCode) {
-
-        return repo.findEarliestYearByState(stateCode);
+    public Integer getEarliestYearForState(String stateCode) {
+        validateState(stateCode);
+        return accidentRepository.findEarliestYearByState(stateCode);
     }
 
     @Override
-    public long countAccidentsByStateAndYear(String stateCode, int year) {
-        return repo.countByStateCodeAndYear(stateCode, year);
+    public long countAccidentsByStateAndYear(String stateCode, Integer year) {
+        validateState(stateCode);
+        validateYear(year);
+        return accidentRepository.countByStateCodeAndYear(stateCode, year);
     }
 
     @Override
-    public long countPedestrianAccidentsByStateAndYear(String stateCode, int year) {
-        return repo.countByStateCodeAndYearAndIsPedestrianTrue(stateCode, year);
+    public long countPedestrianAccidentsByStateAndYear(String stateCode, Integer year) {
+        validateState(stateCode);
+        validateYear(year);
+        return accidentRepository.countByStateCodeAndYearAndIsPedestrianTrue(stateCode, year);
     }
 
     @Override
-    public long countPersonalInjuryAccidentsByStateAndYear(String stateCode, int year) {
-        return repo.countByStateCodeAndYearAndIsPersonalInjuryTrue(stateCode, year);
-    }
-
-    // Table filtering
-    @Override
-    public List<?> getAccidentsByYear(int year) {
-        return repo.findByYear(year);
+    public long countPersonalInjuryAccidentsByStateAndYear(String stateCode, Integer year) {
+        validateState(stateCode);
+        validateYear(year);
+        return accidentRepository.countPersonalInjury(stateCode, year);
     }
 
     @Override
-    public List<?> getAccidentsByState(String stateCode) {
-        return repo.findByStateCode(stateCode);
+    public List<AccidentTrendDto> getTrendsForState(String stateCode) {
+        List<AccidentTrendDto> trends = new ArrayList<>();
+
+        for (int year = 2017; year <= 2024; year++) {
+
+            long current = accidentRepository.countByStateCodeAndYear(stateCode, year);
+            long previous = accidentRepository.countByStateCodeAndYear(stateCode, year - 1);
+
+            long diff = current - previous;
+            double pct = previous == 0 ? 0 : (diff * 100.0) / previous;
+
+            String direction = diff > 0 ? "increase" :
+                    diff < 0 ? "decrease" :
+                            "no change";
+
+            trends.add(new AccidentTrendDto(
+                    year,
+                    current,
+                    previous,
+                    diff,
+                    pct,
+                    direction
+            ));
+        }
+
+        return trends;
+    }
+
+
+    // ------------------------------------------------------------
+    // FILTERED ACCIDENT LISTS
+    // ------------------------------------------------------------
+
+    @Override
+    public Page<AccidentDto> filterAccidents(
+            String stateCode,
+            Integer year,
+            Integer type,
+            int page,
+            int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Validate inputs using your existing exceptions
+        if (stateCode != null && !stateCode.matches("\\d{2}")) {
+            throw new InvalidStateCodeException(stateCode);
+        }
+
+        if (year != null && (year < 2016 || year > 2025)) {
+            throw new InvalidYearException(year);
+        }
+
+        Page<Accident> result;
+
+        if (stateCode != null && year != null && type != null) {
+            result = accidentRepository.findByStateCodeAndYearAndAccidentTypeCode(stateCode, year, type, pageable);
+        }
+        else if (stateCode != null && year != null) {
+            result = accidentRepository.findByStateCodeAndYear(stateCode, year, pageable);
+        }
+        else if (stateCode != null && type != null) {
+            result = accidentRepository.findByStateCodeAndAccidentTypeCode(stateCode, type, pageable);
+        }
+        else if (year != null && type != null) {
+            result = accidentRepository.findByYearAndAccidentTypeCode(year, type, pageable);
+        }
+        else if (stateCode != null) {
+            result = accidentRepository.findByStateCode(stateCode, pageable);
+        }
+        else if (year != null) {
+            result = accidentRepository.findByYear(year, pageable);
+        }
+        else if (type != null) {
+            result = accidentRepository.findByAccidentTypeCode(type, pageable);
+        }
+        else {
+            throw new InvalidStateCodeException("At least one filter must be provided.");
+        }
+
+        if (result.isEmpty()) {
+            throw new NoDataForYearException("No accidents found for the given filters.");
+        }
+
+        return result.map(accidentMapper::toDto);
+    }
+
+
+
+
+
+    // ------------------------------------------------------------
+    // KPI SUMMARY
+    // ------------------------------------------------------------
+
+    @Override
+    public AccidentSummaryDto getAccidentSummary(Integer year) {
+        validateYear(year);
+
+        return new AccidentSummaryDto(
+                year,
+                accidentRepository.countTotal(year),
+                accidentRepository.countFatal(year),
+                accidentRepository.countInjury(year),
+                accidentRepository.countBicycle(year),
+                accidentRepository.countCar(year),
+                accidentRepository.countPedestrian(year)
+        );
+    }
+
+
+    // ------------------------------------------------------------
+    // GROUPING
+    // ------------------------------------------------------------
+
+    @Override
+    public List<Object[]> getAccidentsGroupedByState(Integer year) {
+        validateYear(year);
+        return accidentRepository.countByStateForYear(year);
     }
 
     @Override
-    public List<?> getAccidentsByStateAndYear(String stateCode, int year) {
-        return repo.findByStateCodeAndYear(stateCode, year);
+    public List<Object[]> getAccidentsGroupedByType(Integer year) {
+        validateYear(year);
+        return accidentRepository.countByTypeForYear(year);
     }
 
-    @Override
-    public List<?> getAccidentsByStateYearAndType(String stateCode, int year, String type) {
-        return repo.findByStateCodeAndYearAndAccidentType(stateCode, year, type);
-    }
-    // Dashboard summary
-    @Override
-    public Map<String, Object> getAccidentSummary(int year) {
-        Map<String, Object> summary = new HashMap<>();
-        summary.put("year", year);
-        summary.put("totalAccidents", repo.countTotal(year));
-        summary.put("fatalAccidents", repo.countFatal(year));
-        summary.put("injuryAccidents", repo.countInjury(year));
-        summary.put("bicycleAccidents", repo.countBicycle(year));
-        summary.put("carAccidents", repo.countCar(year));
-        summary.put("pedestrianAccidents", repo.countPedestrian(year));
 
-        return summary;
-    }
+    // ------------------------------------------------------------
+    // TOP N FATAL
+    // ------------------------------------------------------------
 
     @Override
-    public long countByYear(int year) {
-        return repo.countTotal(year);
-    }
-    // Grouped analytics
-    @Override
-    public List<Object[]> getAccidentsGroupedByState(int year) {
-        return repo.countByStateForYear(year);
+    public List<Object[]> getTopFatalAccidentsByYear(Integer year, Integer limit) {
+        validateYear(year);
+        return accidentRepository.findTopFatalByYear(year, PageRequest.of(0, limit));
     }
 
-    @Override
-    public List<Object[]> getAccidentsGroupedByType(int year) {
-        return repo.countByTypeForYear(year);
-    }
 
-    // Municipality-level analytics
-    @Override
-    public List<Object[]> getAccidentsByMunicipalityInState(String stateCode) {
-        return repo.countByMunicipalityInState(stateCode);
-    }
+    // ------------------------------------------------------------
+    // MUNICIPALITY
+    // ------------------------------------------------------------
+
+
 
     @Override
-    public List<Object[]> getAccidentsByMunicipalityInStateAndYear(String stateCode, int year) {
-        return repo.countByMunicipalityInStateAndYear(stateCode, year);
+    public List<Object[]> getAccidentsByMunicipalityInStateAndYear(String stateCode, Integer year) {
+        validateState(stateCode);
+        validateYear(year);
+        return accidentRepository.countByMunicipalityInStateAndYear(stateCode, year);
     }
 
-    // Advanced analytics
-    @Override
-    public List<Object[]> getTopFatalAccidentsByYear(int year, int limit) {
-        return repo.findTopFatalByYear(year, PageRequest.of(0, limit));
+
+    // ------------------------------------------------------------
+    // VALIDATION HELPERS
+    // ------------------------------------------------------------
+
+    private void validateState(String stateCode) {
+        if (!stateService.exists(stateCode)) {
+            throw new InvalidStateCodeException("Invalid state code: " + stateCode);
+        }
     }
 
-    // Cross-dataset analytics
-    @Override
-    public double calculateAccidentsPer100kCars(String stateCode, int year) {
-        long accidents = repo.countByStateCodeAndYear(stateCode, year);
-        var car = carRepo.findByIdStateCodeAndIdYear(stateCode, year);
-        if (car == null || car.getCarDensity() == 0) return 0;
-        return (accidents / car.getCarDensity()) * 100000.0;
-    }
-
-    @Override
-    public double calculateAccidentsPerKm2(String stateCode, int year) {
-        long accidents = repo.countByStateCodeAndYear(stateCode, year);
-        var pop = populationRepo.findByIdStateCodeAndIdYear(stateCode, year);
-        if (pop == null || pop.getPopulationDensity() == 0) return 0;
-        return accidents / pop.getPopulationDensity();
-    }
-
-    @Override
-    public double calculateAccidentsPerCapita(String stateCode, int year) {
-        long accidents = repo.countByStateCodeAndYear(stateCode, year);
-        var pop = populationRepo.findByIdStateCodeAndIdYear(stateCode, year);
-        if (pop == null || pop.getPopulationDensity() == 0) return 0;
-        return accidents / (pop.getPopulationDensity() * 1000.0);
+    private void validateYear(Integer year) {
+        if (accidentRepository.countTotal(year) == 0) {
+            throw new NoDataForYearException("No accident data available for year: " + year);
+        }
     }
 
 

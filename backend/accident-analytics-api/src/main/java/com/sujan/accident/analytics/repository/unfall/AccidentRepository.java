@@ -1,6 +1,7 @@
 package com.sujan.accident.analytics.repository.unfall;
 
 import com.sujan.accident.analytics.model.unfall.Accident;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,14 +15,14 @@ public interface AccidentRepository extends JpaRepository<Accident, Long> {
     // ------------------------------------------------------------
 
     @Query("SELECT MIN(a.year) FROM Accident a")
-    int findEarliestYear();
+    Integer findEarliestYear();
 
-    long countByStateCodeAndYear(String stateCode, int year);
+    long countByStateCodeAndYear(String stateCode, Integer year);
 
     @Query("SELECT MIN(a.year) FROM Accident a WHERE a.stateCode = :stateCode")
-    int findEarliestYearByState(String stateCode);
+    Integer findEarliestYearByState(String stateCode);
 
-    long countByStateCodeAndYearAndIsPedestrianTrue(String stateCode, int year);
+    long countByStateCodeAndYearAndIsPedestrianTrue(String stateCode, Integer year);
 
     @Query("""
         SELECT COUNT(a)
@@ -30,7 +31,7 @@ public interface AccidentRepository extends JpaRepository<Accident, Long> {
           AND a.year = :year
           AND a.accidentCategoryCode IN (2, 3)
     """)
-    long countByStateCodeAndYearAndIsPersonalInjuryTrue(String stateCode, int year);
+    long countPersonalInjury(String stateCode, Integer year);
 
 
     // ------------------------------------------------------------
@@ -38,22 +39,22 @@ public interface AccidentRepository extends JpaRepository<Accident, Long> {
     // ------------------------------------------------------------
 
     @Query("SELECT COUNT(a) FROM Accident a WHERE a.year = :year")
-    long countTotal(int year);
+    long countTotal(Integer year);
 
     @Query("SELECT COUNT(a) FROM Accident a WHERE a.year = :year AND a.accidentCategoryCode = 1")
-    long countFatal(int year);
+    long countFatal(Integer year);
 
     @Query("SELECT COUNT(a) FROM Accident a WHERE a.year = :year AND a.accidentCategoryCode IN (2,3)")
-    long countInjury(int year);
+    long countInjury(Integer year);
 
     @Query("SELECT COUNT(a) FROM Accident a WHERE a.year = :year AND a.accidentTypeCode = 3")
-    long countBicycle(int year);
+    long countBicycle(Integer year);
 
     @Query("SELECT COUNT(a) FROM Accident a WHERE a.year = :year AND a.accidentTypeCode = 1")
-    long countCar(int year);
+    long countCar(Integer year);
 
     @Query("SELECT COUNT(a) FROM Accident a WHERE a.year = :year AND a.isPedestrian = true")
-    long countPedestrian(int year);
+    long countPedestrian(Integer year);
 
 
     // ------------------------------------------------------------
@@ -67,7 +68,7 @@ public interface AccidentRepository extends JpaRepository<Accident, Long> {
         GROUP BY a.stateCode
         ORDER BY a.stateCode
     """)
-    List<Object[]> countByStateForYear(int year);
+    List<Object[]> countByStateForYear(Integer year);
 
     @Query("""
         SELECT a.accidentTypeCode, COUNT(a)
@@ -76,21 +77,14 @@ public interface AccidentRepository extends JpaRepository<Accident, Long> {
         GROUP BY a.accidentTypeCode
         ORDER BY COUNT(a) DESC
     """)
-    List<Object[]> countByTypeForYear(int year);
+    List<Object[]> countByTypeForYear(Integer year);
 
 
     // ------------------------------------------------------------
     // MUNICIPALITY GROUPING
     // ------------------------------------------------------------
 
-    @Query("""
-        SELECT a.municipalityCode, COUNT(a)
-        FROM Accident a
-        WHERE a.stateCode = :stateCode
-        GROUP BY a.municipalityCode
-        ORDER BY a.municipalityCode
-    """)
-    List<Object[]> countByMunicipalityInState(String stateCode);
+
 
     @Query("""
         SELECT a.municipalityCode, COUNT(a)
@@ -99,20 +93,32 @@ public interface AccidentRepository extends JpaRepository<Accident, Long> {
         GROUP BY a.municipalityCode
         ORDER BY a.municipalityCode
     """)
-    List<Object[]> countByMunicipalityInStateAndYear(String stateCode, int year);
+    List<Object[]> countByMunicipalityInStateAndYear(String stateCode, Integer year);
 
 
     // ------------------------------------------------------------
     // FILTERS
     // ------------------------------------------------------------
 
-    List<Accident> findByYear(int year);
+    Page<Accident> findByStateCode(String stateCode, Pageable pageable);
 
-    List<Accident> findByStateCode(String stateCode);
+    Page<Accident> findByYear(Integer year, Pageable pageable);
+    Page<Accident> findByStateCodeAndYear(String stateCode, Integer year, Pageable pageable);
 
-    List<Accident> findByStateCodeAndYear(String stateCode, int year);
+    Page<Accident> findByAccidentTypeCode(Integer accidentTypeCode, Pageable pageable);
 
-    List<Accident> findByStateCodeAndYearAndAccidentType(String stateCode, int year, String accidentType);
+    Page<Accident> findByStateCodeAndAccidentTypeCode(String stateCode, Integer accidentTypeCode, Pageable pageable);
+
+    Page<Accident> findByYearAndAccidentTypeCode(Integer year, Integer accidentTypeCode, Pageable pageable);
+
+    Page<Accident> findByStateCodeAndYearAndAccidentTypeCode(
+            String stateCode,
+            Integer year,
+            Integer accidentTypeCode,
+            Pageable pageable
+    );
+
+
 
 
     // ------------------------------------------------------------
@@ -126,5 +132,5 @@ public interface AccidentRepository extends JpaRepository<Accident, Long> {
         GROUP BY a.municipalityCode
         ORDER BY COUNT(a) DESC
     """)
-    List<Object[]> findTopFatalByYear(int year, Pageable pageable);
+    List<Object[]> findTopFatalByYear(Integer year, Pageable pageable);
 }

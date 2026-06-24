@@ -1,5 +1,5 @@
 source_url=https://www.opengeodata.nrw.de/produkte/transport_verkehr/unfallatlas/Unfallorte2021_EPSG25832_CSV.zip
-downloaded_at=2026-05-25T08:26:22.247189+00:00Z
+downloaded_at=2026-06-22T13:34:24.678591+00:00Z
 sha256=7133b8a0bb34e6b4b86db8b1bb3f5df801898b9dc4826bd94e46b4fccffde879
 licence=Datenlizenz Deutschland - Namensnennung - Version 2.0
 licence_url=https://www.govdata.de/dl-de/by-2-0

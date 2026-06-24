@@ -5,10 +5,12 @@ import lombok.Getter;
 
 @Getter
 public class ApiResponseDto<T> {
+    private final String message;
     private final T data;
     private final SourceMetadata sourceMetadata;
 
-    public ApiResponseDto(T data, SourceMetadata sourceMetadata) {
+    public ApiResponseDto(String message, T data, SourceMetadata sourceMetadata) {
+        this.message =  message;
         this.data = data;
         this.sourceMetadata = sourceMetadata;
     }

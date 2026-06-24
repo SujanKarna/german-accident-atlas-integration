@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="dim_plausibility")
+@Table(name="dim_plausibility_level")
 public class PlausibilityLevel {
     @Id
     private Integer plausibilityCode;

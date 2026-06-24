@@ -4,13 +4,6 @@ CREATE TABLE IF NOT EXISTS dim_state (
     state_name TEXT NOT NULL
 );
 
--- -- dim_district
--- CREATE TABLE IF NOT EXISTS dim_location (
---     municipality_code VARCHAR(8) PRIMARY KEY,
---     district_code VARCHAR(5),
---     admin_region_code VARCHAR(5),
---     state_code VARCHAR(2) REFERENCES dim_state(state_code)
--- );
 
 -- dim_accident_type
 CREATE TABLE IF NOT EXISTS dim_accident_type (

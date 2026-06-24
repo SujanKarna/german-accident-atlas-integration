@@ -1,35 +1,67 @@
 package com.sujan.accident.analytics.service.unfall;
 
+import com.sujan.accident.analytics.dto.AccidentDto;
+import com.sujan.accident.analytics.dto.AccidentSummaryDto;
+import com.sujan.accident.analytics.dto.AccidentTrendDto;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
-import java.util.Map;
 
 public interface AccidentService {
 
-    int getEarliestAccidentYear();
-    int getEarliestYearForState(String stateCode);
-    long countAccidentsByStateAndYear(String state, int year);
-    long countPedestrianAccidentsByStateAndYear(String stateCode, int year);
-    long countPersonalInjuryAccidentsByStateAndYear(String stateCode, int year);
+    // ------------------------------------------------------------
+    // BASIC YEAR + STATE QUERIES
+    // ------------------------------------------------------------
+    Integer getEarliestAccidentYear();
+    Integer getEarliestYearForState(String stateCode);
 
-    List<?> getAccidentsByYear(int year);
-    List<?> getAccidentsByState(String stateCode);
-    List<?> getAccidentsByStateAndYear(String stateCode, int year);
-    List<?> getAccidentsByStateYearAndType(String stateCode, int year, String type);
+    long countAccidentsByStateAndYear(String stateCode, Integer year);
+    long countPedestrianAccidentsByStateAndYear(String stateCode, Integer year);
+    long countPersonalInjuryAccidentsByStateAndYear(String stateCode, Integer year);
 
-    Map<String, Object> getAccidentSummary(int year);
 
-    long countByYear(int year);
-    List<Object[]> getAccidentsGroupedByState(int year);
-    List<Object[]> getAccidentsGroupedByType(int year);
+    List<AccidentTrendDto> getTrendsForState(String stateCode);
 
-    List<Object[]> getTopFatalAccidentsByYear(int year, int limit);
 
-    double calculateAccidentsPer100kCars(String stateCode, int year);
-    double calculateAccidentsPerKm2(String stateCode, int year);
-    double calculateAccidentsPerCapita(String stateCode, int year);
+    // ------------------------------------------------------------
+    // FILTERED ACCIDENT LISTS (DTO OUTPUT)
+    // ------------------------------------------------------------
+    Page<AccidentDto> filterAccidents(
+            String stateCode,
+            Integer year,
+            Integer type,
+            int page,
+            int size
+    );
 
-    List<Object[]> getAccidentsByMunicipalityInState(String stateCode);
-    List<Object[]> getAccidentsByMunicipalityInStateAndYear(String stateCode, int year);
+    // ------------------------------------------------------------
+    // KPI SUMMARY (DTO OUTPUT)
+    // ------------------------------------------------------------
+    AccidentSummaryDto getAccidentSummary(Integer year);
 
+
+    // ------------------------------------------------------------
+    // GROUPING FOR CHARTS
+    // ------------------------------------------------------------
+    List<Object[]> getAccidentsGroupedByState(Integer year);
+    List<Object[]> getAccidentsGroupedByType(Integer year);
+
+
+    // ------------------------------------------------------------
+    // TOP N FATAL
+    // ------------------------------------------------------------
+    List<Object[]> getTopFatalAccidentsByYear(Integer year, Integer limit);
+
+
+    // ------------------------------------------------------------
+    // CROSS-DATASET ANALYTICS
+    // ------------------------------------------------------------
+
+
+
+    // ------------------------------------------------------------
+    // MUNICIPALITY ANALYTICS
+    // ------------------------------------------------------------
+
+    List<Object[]> getAccidentsByMunicipalityInStateAndYear(String stateCode, Integer year);
 }

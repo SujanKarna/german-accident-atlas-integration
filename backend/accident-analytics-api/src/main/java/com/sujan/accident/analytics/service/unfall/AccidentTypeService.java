@@ -5,5 +5,5 @@ import com.sujan.accident.analytics.model.unfall.AccidentType;
 import java.util.List;
 
 public interface AccidentTypeService {
-    List<AccidentType> findAll();
+    String getLabel(Integer code);
 }

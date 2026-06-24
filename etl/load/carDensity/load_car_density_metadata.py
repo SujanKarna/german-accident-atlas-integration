@@ -4,7 +4,7 @@ from etl.parse.common.parse_provenance import parse_provenance_file
 
 
 def load_car_density_metadata():
-    DATA_DIR = Path("data/car_density")
+    DATA_DIR = Path("data/carDensity")
     conn = get_connection()
     cur = conn.cursor()
 

@@ -18,9 +18,6 @@ public class Accident {
     @Column(name = "accident_category_code")
     private Integer accidentCategoryCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accident_category_code", insertable = false, updatable = false)
-    private AccidentCategory accidentCategory;
 
     // -----------------------------
     // ACCIDENT KIND
@@ -28,9 +25,7 @@ public class Accident {
     @Column(name = "accident_kind_code")
     private Integer accidentKindCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accident_kind_code", insertable = false, updatable = false)
-    private AccidentKind accidentKind;
+
 
     // -----------------------------
     // ACCIDENT TYPE
@@ -38,9 +33,7 @@ public class Accident {
     @Column(name = "accident_type_code")
     private Integer accidentTypeCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accident_type_code", insertable = false, updatable = false)
-    private AccidentType accidentType;
+
 
     // -----------------------------
     // LIGHT CONDITION
@@ -48,9 +41,7 @@ public class Accident {
     @Column(name = "light_condition_code")
     private Integer lightConditionCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "light_condition_code", insertable = false, updatable = false)
-    private LightCondition lightCondition;
+
 
     // -----------------------------
     // PLAUSIBILITY
@@ -58,9 +49,7 @@ public class Accident {
     @Column(name = "plausibility_code")
     private Integer plausibilityCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plausibility_code", insertable = false, updatable = false)
-    private PlausibilityLevel plausibilityLevel;
+
 
     // -----------------------------
     // ROAD CONDITION
@@ -68,19 +57,13 @@ public class Accident {
     @Column(name = "road_condition_code")
     private Integer roadConditionCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "road_condition_code", insertable = false, updatable = false)
-    private RoadCondition roadCondition;
+
 
     // -----------------------------
     // STATE
     // -----------------------------
     @Column(name = "state_code")
     private String stateCode;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "state_code", insertable = false, updatable = false)
-    private State state;
 
     // -----------------------------
     // MUNICIPALITY
@@ -90,6 +73,8 @@ public class Accident {
 
 
 //    Enum for Week Days
+    @Enumerated(EnumType.STRING)
+    @Column(name = "week_day")
     private WeekDay weekDay;
 
 
@@ -101,7 +86,9 @@ public class Accident {
 //    Coordinates
     private Double latitude;
     private Double longitude;
+    @Column(name = "utm_x")
     private Double utmX;
+    @Column(name = "utm_y")
     private Double utmY;
 
 //    Participant Flags
