@@ -1,0 +1,18 @@
+# Core ETL dependencies
+pandas
+numpy
+
+# HTTP requests for downloading Unfallatlas
+requests
+
+# YAML config loader
+PyYAML
+
+# Database connection (PostgreSQL)
+psycopg2-binary
+
+# Optional: progress bars for ETL
+tqdm
+
+# Optional: environment variable support
+python-dotenv
