@@ -166,10 +166,10 @@ public class AccidentController {
             Returns the number of accidents involving personal injury (Personenschaden)
             in the specified German federal state during the selected year.
             
-            Personal injury accidents include:
-            • Slight injuries
+            Personal injury accidents include (2-3):
+            • not Fatalities
             • Serious injuries
-            • Fatalities
+            • Slight injuries
             
             This metric is essential for safety analysis and severity‑based reporting.
             """
